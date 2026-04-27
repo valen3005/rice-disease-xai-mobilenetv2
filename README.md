@@ -45,4 +45,5 @@ This repository is provided to support the reproducibility of the research paper
 
 ## Author
 
-Valen
+Valentino Memah
+
