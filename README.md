@@ -7,43 +7,44 @@ Repositori ini berisi implementasi resmi untuk riset klasifikasi penyakit daun p
 
 ## 🚀 Key Improvements (Revision Phase)
 
-* **[R1] Reproducibility:** Global SEED kaku dan dokumentasi parameter lengkap.
-* **[R1] Image Quality:** Seluruh visualisasi dihasilkan dengan resolusi **300 DPI**.
-* **[R2] XAI Validation Protocol:** Penambahan protokol validasi semi-kuantitatif menggunakan **Focus Score** dan **Active Region Analysis**.
+* **[R1] Reproducibility:** Global SEED (42) dikunci untuk memastikan hasil yang konsisten.
+* **[R1] Image Quality:** Seluruh visualisasi (Learning Curves, Confusion Matrix, Grad-CAM) dihasilkan dengan resolusi **300 DPI**.
+* **[R2] XAI Validation Protocol:** Penambahan protokol validasi semi-kuantitatif menggunakan metrik **Focus Score** dan **Active Region Analysis**.
 
 ## 📊 Dataset
 
 Dataset terdiri dari citra daun padi yang seimbang (Balanced Dataset) dengan kategori:
 
-* **Bacterial Leaf Blight**
-* **Brown Spot**
-* **Leaf Smut**
+* **Bacterial Leaf Blight** (40 images)
+* **Brown Spot** (40 images)
+* **Leaf Smut** (40 images)
 
 *Dataset split: 80% Training (96 images) / 20% Validation (24 images).*
 
 ## 🧠 Methodology
 
-Arsitektur model menggunakan strategi **Transfer Learning** (MobileNetV2 pretrained ImageNet) dengan spesifikasi:
+Arsitektur model menggunakan strategi **Transfer Learning** (MobileNetV2 pretrained ImageNet):
 
 * **Input Size:** 224 × 224 × 3
 * **Base Model:** Frozen (Non-trainable) untuk menjaga stabilitas pada dataset kecil.
 * **Classifier Head:** Dense (128 units, ReLU), Dropout (0.5), Dense (3 units, Softmax).
-* **XAI Engine:** Grad-CAM pada layer `out_relu` (konvolusi terakhir).
+* **XAI Engine:** Grad-CAM pada layer `out_relu` (konvolusi terakhir dari base model).
 
 ## 📈 Performance Results
 
-Model mencapai performa tinggi yang stabil tanpa indikasi overfitting:
+Model menunjukkan performa yang kompetitif dan stabil melalui mekanisme *Early Stopping* untuk mencegah overfitting:
 
-* **Training Accuracy:** 97.79%
-* **Validation Accuracy:** 95.83%
-* **Mean F1-Score:** > 0.95 (Sangat Kuat)
+* **Training Accuracy:** 94.79%
+* **Validation Accuracy (Best):** 91.67%
+* **Weighted Avg F1-Score:** 0.88
 
 ## 🔍 Explainability Analysis (Reviewer 2 Response)
 
-Kami memperkenalkan metrik baru untuk memvalidasi kejujuran model secara kuantitatif:
+Kami mengukur transparansi model secara kuantitatif melalui protokol validasi Grad-CAM:
 
-* **Focus Score:** Rata-rata > 75/100 (Menunjukkan model sangat terfokus pada lesi penyakit).
-* **Active Region:** Rata-rata < 15% (Membuktikan model tidak melihat background atau noise).
+* **Mean Confidence:** ~89% (Model menunjukkan keyakinan tinggi pada prediksi kelas yang benar).
+* **Active Region:** ~26% (Model fokus pada area spesifik daun, meminimalisir pengaruh noise latar belakang).
+* **Mean Focus Score:** ~11.8 (Memberikan dasar kuantitatif untuk evaluasi spasial interpretibilitas).
 
 ## 🛠️ Installation & Usage
 
@@ -67,9 +68,9 @@ Jalankan file `Paper_ValentinoJulioMemah.ipynb` secara berurutan.
 
 ## 📂 Repository Structure
 
-* `Paper_ValentinoJulioMemah.ipynb`: Notebook utama eksperimen.
-* `outputs/`: Folder berisi grafik resolusi tinggi (Loss, Accuracy, Confusion Matrix, Grad-CAM).
-* `xai_validation_summary.txt`: Laporan detail metrik interpretabilitas.
+* `Paper_ValentinoJulioMemah.ipynb`: Notebook utama eksperimen (versi revisi).
+* `outputs/`: Grafik resolusi tinggi untuk kebutuhan publikasi (DPI=300).
+* `xai_validation_summary.txt`: Laporan otomatis metrik interpretibilitas per kelas.
 
 ## 🎓 Citation
 
